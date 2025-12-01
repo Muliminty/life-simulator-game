@@ -63,16 +63,40 @@ pnpm install
 npm install
 ```
 
-#### 3️⃣ 配置环境变量
+#### 3️⃣ 配置 AI 服务
 
-在项目根目录创建 `.env.local` 文件：
+**方式一：通过配置文件（推荐，运维人员使用）**
+
+编辑 `config/ai.json` 文件，修改 `defaultModel` 字段选择要使用的模型：
+
+```json
+{
+  "defaultModel": "qwen-72b",  // 修改这里切换模型
+  "models": [...]
+}
+```
+
+支持的模型 ID：`qwen-72b`, `deepseek-v3`, `gpt-4`, `gpt-3.5-turbo` 等
+
+**方式二：通过环境变量（开发者使用）**
+
+在项目根目录创建 `.env.local` 文件（可参考 `env.example` 文件）：
 
 ```bash
-# .env.local
-# AI 服务配置
+# 复制示例文件
+cp env.example .env.local
+
+# 然后编辑 .env.local，填入你的实际 API Key
+```
+
+`.env.local` 文件内容：
+
+```bash
+# AI API Key（必需）
 VITE_AI_KEY=your-api-key-here
-VITE_AI_PROVIDER=siliconflow  # 可选: siliconflow, openai, custom
-VITE_AI_MODEL=Qwen/Qwen2.5-72B-Instruct  # 可选，使用默认值
+
+# 可选：临时覆盖配置文件中的模型（通过环境变量）
+# VITE_AI_MODEL_ID=qwen-72b
 ```
 
 > 💡 **获取 API Key**:
@@ -80,7 +104,12 @@ VITE_AI_MODEL=Qwen/Qwen2.5-72B-Instruct  # 可选，使用默认值
 > - 访问 [SiliconFlow](https://siliconflow.cn) 注册账号并创建 API Key
 > - 如需使用其他 AI 服务，设置 `VITE_AI_PROVIDER` 环境变量
 >
-> ⚠️ **安全提示**: `.env.local` 文件已添加到 `.gitignore`，不会被提交到 Git。
+> ⚠️ **重要安全提示**:
+>
+> - **绝对不要**将 API Key 硬编码在代码中
+> - **绝对不要**提交 `.env.local` 文件到 Git（已添加到 `.gitignore`）
+> - **绝对不要**在代码仓库、Issue、PR 中暴露真实的 API Key
+> - 如果意外提交了 API Key，请立即在服务商处重新生成新的 Key
 
 #### 4️⃣ 启动开发服务器
 
@@ -270,6 +299,8 @@ pnpm preview      # 或 npm run preview
 - [实现方案](./doc/IMPLEMENTATION.md)
 - [开发指南](./doc/DEVELOPMENT.md)
 - [贡献指南](./doc/CONTRIBUTING.md)
+- [部署指南](./DEPLOYMENT.md)
+- [AI 配置说明](./config/README.md)
 
 ---
 
